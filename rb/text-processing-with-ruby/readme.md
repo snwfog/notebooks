@@ -113,3 +113,28 @@ proper file, to remember _ARGV_ is mutable
 
 - Use `shift` or `push` to add arguments to `ARGV`
 from left and right
+
+- `$/` is ruby's _input record separator_,
+by default its `\n`, e.g. `each`
+
+- `$;` is ruby _input record field separator_,
+e.g. `split`
+
+- `-F` can set the `$;` values in as option
+
+```
+$ ruby -F: -e 'p $;'
+/:/
+```
+
+- `-a` the auto-split option, ruby will automatically
+populate the `$F` variable with the content of
+`$_.split`, it will automatically split every
+line of input
+
+```
+$ ruby -F'\t' -ane 'puts $F[1]' shopping.tsv
+```
+
+- `require 'csv'` and use `CSV`, is very similar to
+an ordinary IO object, with `::read`, `::foreach`, etc
