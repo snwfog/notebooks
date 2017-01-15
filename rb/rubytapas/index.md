@@ -152,3 +152,174 @@ end
 - Might be overkill, but good to introduce less coupling
 
 # 20 Struct
+- Struct.new returns a class
+- Attributes are accessible via symbol, string, and normal message call
+- Struct classes includes Enumerable
+- Struct#members iterate through all members
+- Struct.new accepts constructor which is instance_eval'ed, so new method can be added
+
+# 21 Domain Model Events
+- Observer pattern
+
+# 22 Inline Rescue
+- expression `rescue` something
+- - If expression fails, then rescue will return the following expression
+- - Code smell
+
+# 23 Tempfile
+- Tempfile helps you to create tempfile in the tmp folder
+
+# 24 Incidental Change
+- Single responsibility principle
+
+# 25 OpenStruct
+- OStruct#new accepts a hash and allow calling hash attributes on the struct object
+- Allow dynamic method definition
+- OStruct misses some methods from struct, such as iterate through keys
+- Performance issues
+- Prototyping object models
+- Stub object in test
+
+# 26 FFI
+
+# 27 Macros and Modules
+- Macro: class level method that generates other methods, modules or classes
+
+# 28 Macro and Modules
+- Creating anonymous module using Module.new, you can implement to_s to give a signifiant name when introspecting the ancestors
+- const_defined?, const_get, const_set
+
+# 29 Redirecting Output
+- Standard out
+- STDOUT can be changed by Object.const_set(:STDOUT, fake_stdout)
+- - It will reassign the constant, and a warning will be raised
+- - Uses IO.pipe to create reader and writer pipe, but I'm still confused
+
+# 30 Backtick
+- Is an actual operator
+- Can be overloaded
+```
+alias old_backtick `
+def `(lol)
+  puts something
+  old_backtick(lol)
+end
+```
+- You can also override backtick in class... as a method, similar to `to_s`
+
+# 31 Observer Variations
+- More observer patterns variations...
+
+# 32 Hash Default Blocks
+- Default Hash.new blocks is invoked if hash is accessed with a missing key
+- `default_proc` stores the proc, else nil is returned
+- This leads to: which automatically allows arbitrary hash nesting
+```
+Hash.new do |hash, missing_key|
+  hash[missing_key] = Hash.new(&hash.default_proc)
+end
+```
+
+# 33 Classes and Constants
+- point = Class.new {}
+- point.name => nil
+- Point = point => Point.name => "Point"
+- point.name => "Point"
+
+# 34 Struct from Hash
+- Struct#members for introspection is great, but keep it internal
+- Do not call introspect method on object outside of the class, to reduce coupling, and swapping struct object out
+
+# 35 Callable
+- `call` method is useful
+
+# 36 Blocks, Procs, and Lambdas
+- Usual info about procs and lambdas
+- Proc keep the context of execution, and will end the method which proc was called
+- - The return act as if it was executed in that context
+- `yield` calls the implicit block arguments
+
+# 37 proc and threequals
+- proc alias === to the call method
+
+# 38 Caller specific Callback
+- Use the default proc implicit arguments of method to handle edge cases for a library method
+
+# 39 Gem Love part 1
+- How to add a custom command to `gem`
+
+# 40 Gradual Stiffening
+```
+ruby -n -a -rjson \
+-e 'BEGIN { $/="\r\n"; $;=/:\s*/; headers={} }' \
+-e 'break if $F.size < 2' \
+-e 'headers[$F[0]] = $F[1].chomp' \
+-e 'END { puts JSON.pretty_generate(headers) }' \
+< data.txt
+```
+
+# 41 String#scan
+- scan takes a block, and is regex group aware, the block will yield different groups as arguments
+
+# 42 Streaming
+- #each method returns Enumerator, which can be a lazy iterable object over a collection
+
+# 43 Exclusive Or
+- ^ is the exclusive or operator, and the first expression should be a boolean
+- - The easiest way to convert it to a boolean is to use the double ban `!!` operator
+
+# 44 #one?
+- [42, nil, 'banana'].one? => false
+- [42, nil, nil].one? => true
+- [].one? => false
+- [1].one? => true
+- [45, 43, 90].one?(:odd?)
+
+# 45 Hash Default Values
+- The hash constructor with a default value always returns the _same_ object
+- - Hence an array will always be the same array returned
+
+# 46 Gem Love Part 2
+- Shellwords => Manipulates strings like the UNIX Bourne shell
+- Parsing, or escaping strings according to shell rules
+- Interesting integration tests
+- In memory Sqlite database using Datamapper library
+
+# 47 FFI Part 2 Smoke Test
+- Smoke test: high level test that uses to verify that nothing is horribly broken, or produce black smoke
+
+# 48 Memoize
+- Macro for a memoizable method
+
+# 49 Utility Function
+- Creates module functions for the named methods
+- These functions may be called with the module as a receiver, and also become available as instance methods to classes that mix in the module
+```
+module Utils
+  module_function
+  def hi
+    puts 'hi'
+  end
+end
+
+Utils::hi
+class Test
+  include Utils
+  def method
+    hi
+  end
+end
+```
+- Utils => pronounced as 'U-deul'
+
+# 50 Include Namespace
+```
+module A
+  def func1
+  end
+
+  module B
+    include A
+  end
+end
+```
