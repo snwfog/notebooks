@@ -323,3 +323,97 @@ module A
   end
 end
 ```
+
+# 51 FFI Part 3
+
+# 52 When to Stop Mocking
+- Only mock what you own
+- Adapter interface actually is poor for mocking
+- - Its better to use integration style tests to test on real data
+
+# 53 Selectively Run Tests
+- Some command line arguments to run tests by categories or by names for minitest and rspec
+
+# 54 FFI Part 4
+# Runnable Library
+- `__FILE__` filename that is running the current code
+- - If `require`ed, then its the full qualify path that will be printed out
+- - If passed in arg, then its the name that will be passed that is printed
+```
+ruby foo.rb => puts __FILE__ => foo.rb
+ruby ./foo.rb => puts __FILE__ => ./foo.rb
+```
+- $PROGRAMNAME or $0, a lot of time $PROGRAMNAME is just the filename, except if the file is `require`ed
+
+# 56 xmpfilters
+# 57 FFI Part 5
+
+# 58 ARGF
+- Special objects that behaves like an IO readonly IO object
+- If its files name, try to read and act as if the multiple files concatenated into a single giant file
+- If no files, then act as STDIN
+
+# 59 Enumerator
+- Takes any method that yield to a block, and turns it into a lazy iterable objects which contains all the handy methods from Enumerable
+- #to_enum turns a method into Enumerator
+- Enumerator#with_index
+
+# 60 Ascend
+- Code explains better
+```
+p = Pathname.new("/usr/local/bin")
+ascender = p.to_enum(:ascend)
+ascender.to_a => [<#Pathname>'/usr/local/bin',
+                  <#Pathname>'/usr/local',
+                  <#Pathname>'/usr',
+                  <#Pathname>'/']
+```
+
+# 61 Fiber
+- Using fiber to implement an Enumerator
+
+# 64 Yield or Enumerate
+- __callee__ special variable is always the name of the current calling method
+
+# 66 Caching an API
+- Using a simple hash to act as a cache
+
+# 67 Moneta
+
+# 68 Display Builder
+- Its like a builder/renderer pattern
+- Tell Don't Ask pattern, the model tell renderer about its attributes instead of the renderer asking for attributes
+- Design pattern
+
+# 69 Gem Love Part 4
+-
+
+# 70 Break keyword
+- break can be used to terminate the yield
+- break break also respects the ensure clause in a method, similar to exception
+
+# 71 Break with a value
+- break can take an option arguments
+- if break is provided an argument, then it effectively override the return values of the method
+```
+result = f.lines.detect do |line|
+  break "Not found" if f.lineno >= 100
+  line =~ /banana/
+end
+```
+
+# 72 Tail Part 1 Random Access
+- File current offset in random read File#tell
+- File#seek jumps to offset wrt to the beginning of the file
+- File#seek(byte, IO::SEEK_CUR), move x byte relatively to the current position of the cursor
+- File#seek(0, IO::SEEK_END), move x byte wrt to the end of the file
+- Negative argument move back from the end of the file
+
+# 73 Tail Part 2 Do-While
+- do-while in Ruby is expressed as `begin ... end while cond`
+
+# 74 Tail Part 3 rindex
+- `string#rindex` is like index, but starts from the end
+
+# 75 Tail Part 4 copy_stream
+- 

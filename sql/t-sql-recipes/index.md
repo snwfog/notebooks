@@ -99,3 +99,15 @@ ORDER BY w.WorkOrderID,
 - - ORDER BY defines the order in which the OVER clause evaluates the data subset for the function
 - - - It can only refers to columns that are in the FROM clause
 - - RANGE | ROWS a bit too complicated for now...
+
+- FIRST_VALUE and LAST_VALUE can be an easy way to obtain values in a window function
+- - It decouple the value to be queried and the order by clause
+
+- DBCC OPENTRAN can be used to identify the _OLDEST_ open transaction
+- Backing up transaction log only clean up inactive transaction, therefore opened transcation will take space and eventually an uncommitted transaction can reach physical disk limit
+
+- Query `sys.dm_tran_session_transactions` mapping between session ID and the transaction ID
+- Query `sys.dm_exec_connections` and `sys.dm_exec_sql_text` to find the latest command executed by the session, referencing the `most_recent_sql_handle` column
+- Query `sys.dm_tran_active_transactions` to determine how long the transaction was open, the type of transaction, and the state of the transaction
+
+- Query `sys.dm_tran_locks` to monitor locking activity
